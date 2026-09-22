@@ -1,0 +1,7 @@
+# Configurazione minima per la Supabase CLI.
+# Genera il file completo con `supabase init` se preferisci; queste sono le impostazioni
+# rilevanti per il progetto.
+
+[functions.claude-proxy]
+# La funzione verifica il JWT dell'utente e l'appartenenza al team.
+verify_jwt = true
