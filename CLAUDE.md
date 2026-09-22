@@ -21,7 +21,7 @@ Serve un file `.env.local` (vedi `.env.example`). Setup completo di Supabase nel
 ```
 src/
   App.jsx            # l'intera app (~4.400 righe): motore di calcolo in alto, componenti UI sotto
-  AuthGate.jsx       # login via link email + pulsante Esci
+  AuthGate.jsx       # login nome utente + password, pulsante Esci
   main.jsx
   lib/
     supabase.js      # client Supabase
@@ -44,7 +44,8 @@ supabase/
 - Se il caricamento iniziale fallisce, il salvataggio resta disabilitato (uno stato vuoto non deve
   mai sovrascrivere i dati reali). Non rimuovere questa protezione.
 - Ogni salvataggio che cambia i dati archivia la versione precedente in `app_state_history`.
-- Accesso: solo utenti autenticati con email in `team_members` (policy RLS). Nessuna delete dal client.
+- Accesso: login con nome utente e password (nessuna email inviata dall'app); leggono e scrivono
+  solo gli utenti autenticati con email in `team_members` (policy RLS). Nessuna delete dal client.
 
 ### Funzioni esterne
 

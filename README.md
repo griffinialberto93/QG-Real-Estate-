@@ -26,14 +26,16 @@ insert into public.team_members (email, nome) values
 
 ### 3. Autenticazione
 
-In **Authentication**:
-- **Sign In / Providers → Email**: attivo.
-- Disattiva **Allow new users to sign up**: si entra solo su invito.
-- **Users → Invite user** per ciascun socio (stesse email di `team_members`).
-- **URL Configuration**: imposta la Site URL (in sviluppo `http://localhost:5173`, poi l'indirizzo
-  di produzione) e aggiungila tra i Redirect URLs.
+Si entra con **nome utente e password**: l'app non invia mai email. Chi scrive solo il nome
+utente (`alberto`) accede all'account `alberto@qgrealestate.it`.
 
-L'accesso avviene con un link via email, senza password.
+In **Authentication**:
+- **Sign In / Providers → Email**: attivo, con **Confirm email** disattivato.
+- Disattiva **Allow new users to sign up**: gli account li crea un amministratore.
+- **Users → Add user → Create new user** per ciascun socio: email uguale a quella in
+  `team_members`, password a scelta, **Auto Confirm User** attivo.
+
+Password dimenticata: un amministratore la reimposta da **Users → … → Reset password**.
 
 ### 4. Funzione per "Chiedi a Claude" e quotazioni
 

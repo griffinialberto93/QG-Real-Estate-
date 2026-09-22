@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { supabase, supabaseConfigured } from "./lib/supabase";
 
-// Login by email link (no passwords). Only users already created in Supabase Auth can sign in,
-// and only emails listed in `team_members` can read or write data (enforced by RLS).
+// Login con nome utente e password: non viene inviata nessuna email. Gli account li crea un
+// amministratore dalla dashboard Supabase; solo le email presenti in `team_members` possono
+// leggere o scrivere i dati (policy RLS).
+
+// Chi scrive solo il nome utente ("alberto") accede all'account "alberto@qgrealestate.it".
+const DOMINIO_PREDEFINITO = "@qgrealestate.it";
 
 const box = {
   minHeight: "100%", display: "flex", alignItems: "center", justifyContent: "center",
@@ -23,8 +27,10 @@ const btn = {
 
 export default function AuthGate({ children }) {
   const [session, setSession] = useState(undefined);
-  const [email, setEmail] = useState("");
+  const [utente, setUtente] = useState("");
+  const [password, setPassword] = useState("");
   const [stato, setStato] = useState("");
+  const [inCorso, setInCorso] = useState(false);
 
   useEffect(() => {
     if (!supabaseConfigured) return;
@@ -49,22 +55,24 @@ export default function AuthGate({ children }) {
   if (session === undefined) return <div style={box}>Caricamento…</div>;
 
   if (!session) {
-    const invia = async (e) => {
+    const entra = async (e) => {
       e.preventDefault();
-      setStato("Invio in corso…");
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: { shouldCreateUser: false, emailRedirectTo: window.location.origin },
-      });
-      setStato(error ? "Accesso non consentito per questa email." : "Controlla la posta: ti ho inviato il link di accesso.");
+      const nome = utente.trim().toLowerCase();
+      const emailAccount = nome.includes("@") ? nome : nome + DOMINIO_PREDEFINITO;
+      setInCorso(true);
+      setStato("");
+      const { error } = await supabase.auth.signInWithPassword({ email: emailAccount, password });
+      setInCorso(false);
+      if (error) setStato("Nome utente o password non validi.");
     };
     return (
       <div style={box}>
-        <form style={card} onSubmit={invia}>
+        <form style={card} onSubmit={entra}>
           <div style={{ fontSize: 17, fontWeight: 600 }}>QG Real Estate</div>
-          <div style={{ fontSize: 12.5, color: "#8b91a0", marginTop: 4 }}>Accedi con la tua email aziendale.</div>
-          <input style={input} type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@qgrealestate.it" />
-          <button style={btn} type="submit">Invia link di accesso</button>
+          <div style={{ fontSize: 12.5, color: "#8b91a0", marginTop: 4 }}>Accedi con nome utente e password.</div>
+          <input style={input} type="text" required autoFocus autoComplete="username" value={utente} onChange={(e) => setUtente(e.target.value)} placeholder="nome utente" />
+          <input style={input} type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password" />
+          <button style={btn} type="submit" disabled={inCorso}>{inCorso ? "Accesso in corso…" : "Entra"}</button>
           {stato && <div style={{ fontSize: 12.5, color: "#8b91a0", marginTop: 12 }}>{stato}</div>}
         </form>
       </div>
