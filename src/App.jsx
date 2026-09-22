@@ -13,7 +13,7 @@ import {
   PiggyBank, ShieldAlert, CircleDollarSign, CalendarClock, Upload, FileUp,
   KeyRound, Home, ArrowDownLeft, ArrowUpRight, Pencil,
   LineChart as LineChartIcon, Scale, Sparkles, SendHorizontal, RefreshCw,
-  Download,
+  Download, LogOut,
 } from "lucide-react";
 
 /* ============================================================
@@ -4115,7 +4115,7 @@ REGOLE IMPORTANTI:
 /* ============================================================
    MAIN APP
    ============================================================ */
-export default function QGRealEstateApp() {
+export default function QGRealEstateApp({ userEmail, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [liquidity, setLiquidity] = useState(emptyLiquidity());
   const [operations, setOperations] = useState([]);
@@ -4429,6 +4429,16 @@ export default function QGRealEstateApp() {
             <div style={{ fontSize: 10.5, color: "var(--negative)", textAlign: "center" }}>{importError}</div>
           )}
           <div style={{ fontSize: 10.5, color: "var(--text-dim)", textAlign: "center" }}>{saveStatus || "Dati condivisi col team"}</div>
+          {onLogout && (
+            <button
+              className="qg-btn qg-btn-ghost"
+              style={{ fontSize: 11, justifyContent: "center", padding: "6px 8px" }}
+              onClick={onLogout}
+              title={userEmail ? `Connesso come ${userEmail}` : undefined}
+            >
+              <LogOut size={13} /> Esci
+            </button>
+          )}
         </div>
       </div>
 

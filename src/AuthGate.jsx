@@ -79,19 +79,9 @@ export default function AuthGate({ children }) {
     );
   }
 
-  return (
-    <>
-      {children}
-      <button
-        onClick={() => supabase.auth.signOut()}
-        title={session.user.email}
-        style={{
-          position: "fixed", right: 12, bottom: 12, fontSize: 11, padding: "5px 10px",
-          background: "#1f2430", color: "#8b91a0", border: "1px solid #2a3040", borderRadius: 6, cursor: "pointer",
-        }}
-      >
-        Esci
-      </button>
-    </>
-  );
+  // Il pulsante Esci lo disegna l'app nella barra laterale.
+  return React.cloneElement(children, {
+    userEmail: session.user.email,
+    onLogout: () => supabase.auth.signOut(),
+  });
 }
