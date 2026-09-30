@@ -66,6 +66,31 @@ npm run dev
 
 Controlla poi che saldi e operazioni coincidano con l'artifact prima di smettere di usarlo.
 
+## Lavorare da un altro computer
+
+Il progetto vive su GitHub: per riprenderlo altrove basta clonarlo e ricreare `.env.local`, che
+non è nel repo perché contiene la configurazione del progetto Supabase.
+
+Servono [Git](https://git-scm.com) e [Node.js](https://nodejs.org) 18 o superiore.
+
+```bash
+git clone https://github.com/griffinialberto93/QG-Real-Estate-.git
+cd QG-Real-Estate-
+npm install
+cp .env.example .env.local   # poi inserisci i due valori, vedi sotto
+npm run dev
+```
+
+I due valori di `.env.local` si leggono da Supabase → **Project Settings → API**:
+`VITE_SUPABASE_URL` è il Project URL, `VITE_SUPABASE_ANON_KEY` è la chiave `anon` / `public`
+(quella pubblica, non la `service_role`).
+
+Non serve rifare niente su Supabase o Vercel: il database è lo stesso e ogni push su `main`
+fa ripartire da solo il deploy in produzione.
+
+Il contesto per Claude (architettura, regole di calcolo, regole di lavoro) è in `CLAUDE.md`,
+già dentro il repo: da un'altra installazione di Claude Code viene letto automaticamente.
+
 ## Pubblicazione
 
 La build (`npm run build`) è un sito statico in `dist/`, pubblicabile su Vercel, Netlify o
